@@ -28,7 +28,8 @@
             <div class="content-grid mdl-grid">
               <div class="mdl-cell">
                 <!--   Main page content here:   -->  
-
+                var jakeKidder = 0
+                
               </div>
             </div>
           </main>    
