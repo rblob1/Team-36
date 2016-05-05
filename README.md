@@ -36,3 +36,17 @@ https://developers.google.com/maps/documentation/javascript/tutorial?hl=en#The_H
 //Tutorial for geocoding
 //Geocoding = process of converting addresses (like "1600 Amphitheatre Parkway, Mountain View, CA") into geographic coordinates (like latitude 37.423021 and longitude -122.083739)
 https://developers.google.com/maps/documentation/javascript/geocoding#Geocoding
+
+//ALL RESOURCES PROVIDED
+● http://www.getmdl.io/
+(MDL: Material Design Lite documentation)
+● https://developer.mozilla.org/en­US/docs/Web/API/Geolocation/Using_geolocation
+(Mozilla Developer Network: Reading the GPS sensor)
+● https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date
+(Mozilla Developer Network: Date documentation)
+● https://developer.forecast.io/docs/v2
+(The Dark Sky Forecast AI documentation)
+● https://developers.google.com/maps/documentation/javascript/tutorial
+(Google Maps JavaScript API)
+● https://developers.google.com/maps/documentation/javascript/geocoding
+(Google Maps JavaScript API: Geocoding Service)
