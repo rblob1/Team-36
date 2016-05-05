@@ -17,7 +17,7 @@ this.routesResponse = function(routes)
 	document.getElementById("outputArea").innerHTML = output;
 }
 
-<b>Make the API request:<b/>
+//Make the API request:
 var url = "https://eng1003.eng.monash.edu/OpenFlights/routes/?airline=QF&sourceAirport=MEL&callback=this.routesResponse";
 var script = document.createElement('script');
 script.src = url;
