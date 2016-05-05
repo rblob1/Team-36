@@ -17,12 +17,22 @@ this.routesResponse = function(routes)
 	document.getElementById("outputArea").innerHTML = output;
 }
 
-// Make the API request:
+<b>Make the API request:<b/>
 var url = "https://eng1003.eng.monash.edu/OpenFlights/routes/?airline=QF&sourceAirport=MEL&callback=this.routesResponse";
 var script = document.createElement('script');
 script.src = url;
 document.body.appendChild(script);
 
-//Make API request to forecast
+//Make API request to forecast; returns the current forecast (for the next week)
 //Enter own lat/lon
 https://api.forecast.io/forecast/bc23b5298009dbc490bc2d751873296a/LATITUDE,LONGITUDE
+
+//Make API request to previous weather; returns the observed weather at a given time (for many places, up to 60 years in the past):
+https://api.forecast.io/forecast/bc23b5298009dbc490bc2d751873296a/LATITUDE,LONGITUDE,TIME
+
+//Tutorial for using Google maps API
+https://developers.google.com/maps/documentation/javascript/tutorial?hl=en#The_Hello_World_of_Google_Maps_v3
+
+//Tutorial for geocoding
+//Geocoding = process of converting addresses (like "1600 Amphitheatre Parkway, Mountain View, CA") into geographic coordinates (like latitude 37.423021 and longitude -122.083739)
+https://developers.google.com/maps/documentation/javascript/geocoding#Geocoding
