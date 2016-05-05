@@ -12,8 +12,7 @@ this.routesResponse = function(routes)
 	var output = ""
 	for (var i = 1; i < routes.length; i++)
 	{
-			
-			output += '<p>' + routes[i].destinationAirport + '<br/>' + routes[i].stops + '</p>';
+		output += '<p>' + routes[i].destinationAirport + '<br/>' + routes[i].stops + '</p>';
 	}
 	document.getElementById("outputArea").innerHTML = output;
 }
@@ -23,3 +22,7 @@ var url = "https://eng1003.eng.monash.edu/OpenFlights/routes/?airline=QF&sourceA
 var script = document.createElement('script');
 script.src = url;
 document.body.appendChild(script);
+
+//Make API request to forecast
+//Enter own lat/lon
+https://api.forecast.io/forecast/bc23b5298009dbc490bc2d751873296a/LATITUDE,LONGITUDE
