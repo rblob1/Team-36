@@ -31,7 +31,9 @@
                 
                   <form action="action_page.php" method="get">
                   <span>Enter a town or address...</span><br>
-                  <input id="address" type="textbox" placeholder="i.e Monash Clayton"><input type="button" value="Encode" onclick="codeAddress()"><br>
+                    
+                  <input id="address" type="textbox" placeholder="i.e Monash Clayton" onkeypress="codeAddress()"> <!-- The event occurs when the user presses a key -->
+                        <input type="button" value="Encode" onclick="codeAddress()"><br>
                   <span>Enter a label for this location...</span><br>
                   <input type="text" name="AddressLabel" placeholder="i.e Mon. Uni"><br>
                   </form><br>
@@ -72,6 +74,7 @@
                   }
                    
                 google.maps.event.addDomListener(window, 'load', initialize); // DOM listener will execute the initialize() function when the page is loaded
+                 
                  
                 </script>
                   
