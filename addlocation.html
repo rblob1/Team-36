@@ -29,19 +29,44 @@
               <div class="mdl-cell">
                 <!--   Main page content here:   -->  
                 
-                  <form action="action_page.php" method="get">
-                  <span>Enter a town or address...</span><br>
-                    
-                  <input id="address" type="textbox" placeholder="i.e Monash Clayton" onkeypress="codeAddress()"> <!-- The event occurs when the user presses a key -->
-                        <input type="button" value="Encode" onclick="codeAddress()"><br>
-                  <span>Enter a label for this location...</span><br>
-                  <input type="text" name="AddressLabel" placeholder="i.e Mon. Uni"><br>
-                  </form><br>
+                  <!-- HTML for SAVE LOCATION text fields -->
+                  <form action="#">
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width:200px">
+                    <input type="text" onkeypress="codeAddress()" class="mdl-textfield__input" type="text" id="sample1" style="width:200px"> <!-- The onkeypress event occurs when the user presses a key -->
+                    <label class="mdl-textfield__label" for="sample1">Enter a town or address...</label>
+                    </div>
+                      
+                      <button type="button" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" onclick="codeAddress()">
+                        <i class="material-icons">search</i> 
+                        <!-- i tag used to add search icon https://design.google.com/icons/#ic_search -->
+                      </button>
+                      
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width:200px">
+                    <input type="text"  class="mdl-textfield__input" type="text" id="sample2" style="width:200px"> 
+                    <label class="mdl-textfield__label" for="sample2">Add label for this location...</label>
+                    </div>
+                      
+                       <!-- <button type="button" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" onclick="......"> onclick adds label to local storage  <i class="material-icons">add</i></button> <!--i tag used to add plus icon https://design.google.com/icons/#ic_search
+                        or,  -->                        
+                          <button onclick="DO SOMETHING" class="mdl-button mdl-js-button mdl-button--raised">Save Location</button> <!-- users location saved to local storage and sent to main page -->
+                      
+                      
+                      
+                      
+                      
+                  </form>
                   
+                  
+                     <!-- HTML for GOOGLE MAP and geocoder -->               
                 <script src="http://maps.googleapis.com/maps/api/js"></script> <!-- google maps API added to web page -->
                 <script>
+                    
+                this.addressLat
+                this.addressLng
+                var addressLabel
                 var geocoder;
-                var map;    
+                var map;   
+                    
                   function initialize() {       // <!-- creates function to initialize map -->
                       geocoder = new google.maps.Geocoder();
                   var mapProp = {       // object (mapProp) to define the properties for the map
@@ -54,7 +79,7 @@
                     
                 }    
                     function codeAddress() {
-                    var address = document.getElementById("address").value;
+                    var address = document.getElementById("sample1").value;
                     geocoder.geocode( { 'address': address}, function(results, status) {
                       if (status == google.maps.GeocoderStatus.OK) {
                         map.setCenter(results[0].geometry.location);
@@ -62,14 +87,32 @@
                             map: map,
                             position: results[0].geometry.location,
                             animation:google.maps.Animation.BOUNCE // makes marker bounce
+                            
                             });
                         var infowindow = new google.maps.InfoWindow({
-                              content:"Hello World!"
+                              content: results[0].formatted_address // The GeocoderResult object represents a single geocoding result. A geocode request may return multiple result objects that can be addressed
                               });
                           infowindow.open(map,marker) // adds info window
-                      } else {
-                        alert("Geocode was not successful for the following reason: " + status);
-                      }
+                          
+                          for (var i = 2; i < 8; i++) // 8 chosen arbitrarirly
+                              {
+                                  if(latitude[i] == null || latitude[i] == "")
+                                      {
+                                            latitude[i] = addressLat; //stores values into public methods
+                                            longitude[i] = addresslng;
+                                      }
+                                  else
+                                      {
+                                            latitude[i+1] = addressLat; //stores values into public methods
+                                            longitude[i+1] = addresslng;
+                                      }
+                              }
+                                                  
+                      } 
+                    else
+                        {
+                            
+                        }
                     });
                   }
                    
@@ -83,15 +126,25 @@
                      <div id="googleMap" style="width: 500px; height: 480px;"></div>
                       
                     </body>
-                  
-                <div>
-                  <br><input type="button" value="Add Location" onclick="...do something"><br>
-                  </div>
+            <script> 
                 
-                
-                
-                
-                
+            /* function intoLocalStorage()
+                {
+                    if(localStorage.getItem("label2") == null || localStorage.getItem("label2") == "")
+                        {
+                            //results[0].geometry.location.lat
+                            //preferName2 = label2
+                            localStorage.setItem("latitude2", results[0].geometry.location.lat);
+                            localStorage.setItem("longitude2", results[0].geometry.location.lng);
+                            var labelInputed = document.getElementById("sample2").value;
+                            localStorage.setItem("label2", labelInputed);
+                            document.getElementById("location2").innerHTML = localStorage.getItem("label2");
+                            this.i = 2;
+                            alert("Saved to local storage, plaese check plot 2 of the drawer");
+                        }
+                }
+                */
+             </script>  
                 
               </div>
             </div>
