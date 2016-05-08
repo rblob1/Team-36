@@ -13,6 +13,31 @@ Date.prototype.simpleDateString = function() {
     return dateString;
 }
 
+function getDateBefore(nDays){
+
+    this.d = new Date();
+    this.year = d.getFullYear();
+    this.month=d.getMonth()+1;
+    this.day=d.getDate();
+	this.dayOfWeek=d.getDay()
+    if(day <= nDays){
+        if(month>1) {
+            month=month-1;
+        }else{
+            year = year-1;
+            month = 12;
+        }
+    }
+    d.setDate(d.getDate()-nDays);
+    year = d.getFullYear();
+    month=d.getMonth()+1;
+    day=d.getDate();
+	dayOfWeek=d.getDay()
+    date = year+"-"+(month<10?('0'+month):mon)+"-"+(day<10?('0'+day):day);
+    //console.log(date)
+    return date; //will be in form YYYY-MM-DD
+ }
+
 // Date format required by forecast.io API.
 // We always represent a date with a time of midday,
 // so our choice of day isn't susceptible to time zone errors.
@@ -38,6 +63,7 @@ function LocationWeatherCache()
     // Returns the number of locations stored in the cache.
     //
     this.length = function() {
+        
     };
     
     // Returns the location object for a given index.
@@ -51,20 +77,53 @@ function LocationWeatherCache()
     // property.  Returns the index of the added location.
     //
     this.addLocation = function(latitude, longitude, nickname)
-    {
+    { 
+        /*
+        if(typeof(Storage) !== "undefined") 
+        {
+            // Code for localStorage/sessionStorage.
+            // Store
+            localStorage.setItem("latitude", latitude);
+            localStorage.setItem("longitude", longitude);
+            localStorage.setItem("label", nickname);
+            // Retrieve
+            document.getElementById("result").innerHTML = localStorage.getItem("lastname");
+        } 
+        else 
+        {
+            // Sorry! No Web Storage support..
+        }
+        */
     }
 
     // Removes the saved location at the given index.
     // 
     this.removeLocationAtIndex = function(index)
     {
+        
     }
 
     // This method is used by JSON.stringify() to serialise this class.
     // Note that the callbacks attribute is only meaningful while there 
     // are active web service requests and so doesn't need to be saved.
     //
-    this.toJSON = function() {
+    this.toJSON = function() 
+    {
+        /*
+        var locationObject = {
+            longitude: "",
+            latitude: "",
+            label: ""
+            }
+                        return publicDataDeckObject
+                    }
+                }
+                else
+                {
+                    console.log("Error: localStorage is not supported by current browser.");
+                }
+        */
+        
     };
 
     // Given a public-data-only version of the class (such as from
