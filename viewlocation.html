@@ -40,7 +40,7 @@
                   function initialize() {       // <!-- creates function to initialize map -->
                       geocoder = new google.maps.Geocoder();
                   var mapProp = {       // object (mapProp) to define the properties for the map
-                    center:new google.maps.LatLng(-37.9120467,145.1343136), //centres on location
+                    center:new google.maps.LatLng(-37.9120467,145.1343136), //centres on location 
                     zoom:13,
                     mapTypeId:google.maps.MapTypeId.ROADMAP
                   };
@@ -62,7 +62,7 @@
                     <input type="range" min="0" max="30" class="mdl-slider mdl-js-slider" value="0" step="1" onchange="showDate(this.value)" />
                     <script type="text/javascript">
                         
-                    function showDate(nDays)
+                    function showDate(nDays) 
                     {
                         this.d = new Date();
                         this.year = d.getFullYear();
@@ -82,15 +82,15 @@
                         month=d.getMonth()+1;
                         day=d.getDate();
                         dayOfWeek=d.getDay()
-                        date = year+"-"+(month<10?('0'+month):mon)+"-"+(day<10?('0'+day):day);
+                        date = year+"-"+(month<10?('0'+month):mon)+"-"+(day<10?('0'+day):day); 
                         
-                        document.getElementById("range").innerHTML=date; //will be in form YYYY-MM-DD
+                        document.getElementById("dateRange").innerHTML=date; //will be in form YYYY-MM-DD
                     }
                          
                     </script>
                     </body>
                   
-                  <h4>Weather <span id="range">for Today</span></h4>
+                  <h4>Weather for <span id="dateRange">Today</span></h4>
                   <body>Summary: ...... <br>Minimum Temp: ..... <br> Maximum Temp: ..... <br>Humidity: .... <br>Wind speed: x km/h <br></body>
                   
                   
