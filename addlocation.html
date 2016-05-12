@@ -48,7 +48,7 @@
                       
                        <!-- <button type="button" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" onclick="......"> onclick adds label to local storage  <i class="material-icons">add</i></button> <!--i tag used to add plus icon https://design.google.com/icons/#ic_search
                         or,  -->                        
-                          <button onclick="DO SOMETHING" class="mdl-button mdl-js-button mdl-button--raised">Save Location</button> <!-- users location saved to local storage and sent to main page -->
+                          <button onclick="saveLocationButton()" class="mdl-button mdl-js-button mdl-button--raised">Save Location</button> <!-- users location saved to local storage and sent to main page -->
                       
                       
                       
@@ -61,16 +61,18 @@
                 <script src="http://maps.googleapis.com/maps/api/js"></script> <!-- google maps API added to web page -->
                 <script>
                     
-                this.addressLat
-                this.addressLng
-                var addressLabel
+                var savedLocation = [];
+                var savedLocationData = "";
                 var geocoder;
-                var map;   
+                var map;
+                var lat = "";
+                var lng = "";
+                var labelName = "";
                     
                   function initialize() {       // <!-- creates function to initialize map -->
                       geocoder = new google.maps.Geocoder();
                   var mapProp = {       // object (mapProp) to define the properties for the map
-                    center:new google.maps.LatLng(-37.9120467,145.1343136), //centres on monash clayton when initialized
+                    center:new google.maps.LatLng(-37.9120467,145.1343136), //default centres on monash clayton when initialized
                     zoom:13,
                     mapTypeId:google.maps.MapTypeId.ROADMAP
                   };
@@ -78,7 +80,9 @@
                       
                     
                 }    
-                    function codeAddress() {
+                    //this function geocodes the user input
+                    //function codeAddress() {
+                    this.codeAddress = function() {
                     var address = document.getElementById("sample1").value;
                     geocoder.geocode( { 'address': address}, function(results, status) {
                       if (status == google.maps.GeocoderStatus.OK) {
@@ -86,7 +90,7 @@
                         var marker = new google.maps.Marker({
                             map: map,
                             position: results[0].geometry.location,
-                            animation:google.maps.Animation.BOUNCE // makes marker bounce
+                            //animation:google.maps.Animation.BOUNCE // makes marker bounce
                             
                             });
                         var infowindow = new google.maps.InfoWindow({
@@ -94,25 +98,20 @@
                               });
                           infowindow.open(map,marker) // adds info window
                           
-                          for (var i = 2; i < 8; i++) // 8 chosen arbitrarirly
+                          // Storing geocoded data
+                          lat = results[0].geometry.location.lat
+                          lng = results[0].geometry.location.lng
+                          if (document.getElementById("sample2").value === null || document.getElementById("sample2").value === "" )
                               {
-                                  if(latitude[i] == null || latitude[i] == "")
-                                      {
-                                            latitude[i] = addressLat; //stores values into public methods
-                                            longitude[i] = addresslng;
-                                      }
-                                  else
-                                      {
-                                            latitude[i+1] = addressLat; //stores values into public methods
-                                            longitude[i+1] = addresslng;
-                                      }
+                                  labelName = results[0].formatted_address
                               }
-                                                  
+                          else
+                              {
+                                  labelName = document.getElementById("sample2").value
+                              }
+                                                                            
                       } 
-                    else
-                        {
-                            
-                        }
+                    
                     });
                   }
                    
@@ -128,22 +127,13 @@
                     </body>
             <script> 
                 
-            /* function intoLocalStorage()
+                function saveLocationButton()
                 {
-                    if(localStorage.getItem("label2") == null || localStorage.getItem("label2") == "")
-                        {
-                            //results[0].geometry.location.lat
-                            //preferName2 = label2
-                            localStorage.setItem("latitude2", results[0].geometry.location.lat);
-                            localStorage.setItem("longitude2", results[0].geometry.location.lng);
-                            var labelInputed = document.getElementById("sample2").value;
-                            localStorage.setItem("label2", labelInputed);
-                            document.getElementById("location2").innerHTML = localStorage.getItem("label2");
-                            this.i = 2;
-                            alert("Saved to local storage, plaese check plot 2 of the drawer");
-                        }
+                    addlocation(lat, lng, labelName)
                 }
-                */
+                
+           
+                
              </script>  
                 
               </div>
