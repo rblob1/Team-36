@@ -54,14 +54,13 @@
                  </script>
       
                  <body onload="initialize()"><div id="googleMap" style="width: 405px; height: 280px;"></div></body>
-                  <!-- Slider with Starting Value; slider should start on todays date and show previous 30 days-->
-                    
-                  
-                  
+                 
+                  <!-- Slider with Starting Value; slider should start on todays date and show previous 30 days--> 
                   <body>
-                    <input type="range" min="0" max="30" class="mdl-slider mdl-js-slider" value="0" step="1" onchange="showDate(this.value)" />
+                    <input id="slider1" type="range" min="0" max="30" class="mdl-slider mdl-js-slider" value="0" step="1" onchange="showDate(this.value)" />
                     <script type="text/javascript">
                         
+                    // function to take value of slider and display appropriate date    
                     function showDate(nDays) 
                     {
                         this.d = new Date();
@@ -95,7 +94,7 @@
                   
                   
                   <!-- Button to remove location -->
-                  <br><button class="mdl-button mdl-js-button mdl-button--raised" onclick="DO SOMETHING">REMOVE THIS LOCATION</button>
+                  <br><button class="mdl-button mdl-js-button mdl-button--raised" onclick="removeLocation(number, nickname)">REMOVE THIS LOCATION</button>
 
               
               </div>
@@ -106,5 +105,6 @@
         <!--   JavaScript files:   -->
         <script src="js/locationWeatherCache.js"></script>
         <script src="js/viewLocationPage.js"></script>
+        <script src="js/addlocationPage.js"></script>
     </body>
 </html>
