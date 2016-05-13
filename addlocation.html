@@ -42,13 +42,13 @@
                       </button>
                       
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width:200px">
-                    <input type="text"  class="mdl-textfield__input" type="text" id="sample2" style="width:200px"> 
+                    <input type="text"  class="mdl-textfield__input" type="text" id="sample2" style="width:200px" value=""> 
                     <label class="mdl-textfield__label" for="sample2">Add label for this location...</label>
                     </div>
                       
                        <!-- <button type="button" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" onclick="......"> onclick adds label to local storage  <i class="material-icons">add</i></button> <!--i tag used to add plus icon https://design.google.com/icons/#ic_search
                         or,  -->                        
-                          <button onclick="saveLocationButton()" class="mdl-button mdl-js-button mdl-button--raised">Save Location</button> <!-- users location saved to local storage and sent to main page -->
+                          <button onclick="callAddLocation()" onmouseup="location.href = 'index.html';" class="mdl-button mdl-js-button mdl-button--raised">Save Location</button> <!-- users location saved to local storage and sent to main page -->
                       
                       
                       
@@ -68,6 +68,7 @@
                 var lat = "";
                 var lng = "";
                 var labelName = "";
+                var label = "";
                     
                   function initialize() {       // <!-- creates function to initialize map -->
                       geocoder = new google.maps.Geocoder();
@@ -90,7 +91,7 @@
                         var marker = new google.maps.Marker({
                             map: map,
                             position: results[0].geometry.location,
-                            //animation:google.maps.Animation.BOUNCE // makes marker bounce
+                            animation:google.maps.Animation.DROP // makes marker BOUNCE or DROP
                             
                             });
                         var infowindow = new google.maps.InfoWindow({
@@ -99,40 +100,41 @@
                           infowindow.open(map,marker) // adds info window
                           
                           // Storing geocoded data
-                          lat = results[0].geometry.location.lat
-                          lng = results[0].geometry.location.lng
-                          if (document.getElementById("sample2").value === null || document.getElementById("sample2").value === "" )
-                              {
-                                  labelName = results[0].formatted_address
-                              }
-                          else
-                              {
-                                  labelName = document.getElementById("sample2").value
-                              }
+                          lat = results[0].geometry.location.lat()
+                          lng = results[0].geometry.location.lng()
+                          label = results[0].formatted_address
                                                                             
                       } 
                     
                     });
                   }
                    
-                google.maps.event.addDomListener(window, 'load', initialize); // DOM listener will execute the initialize() function when the page is loaded
+                //google.maps.event.addDomListener(window, 'load', initialize); // DOM listener will execute the initialize() function when the page is loaded
                  
                  
                 </script>
                   
-                           
+                   <!-- HTML to initialize map onload -->          
                  <body onload="initialize()">
                      <div id="googleMap" style="width: 500px; height: 480px;"></div>
                       
                     </body>
             <script> 
                 
-                function saveLocationButton()
-                {
-                    addLocation(lat, lng, labelName)
-                    console.log(lat)
+                function callAddLocation()
+                {    
+                    if (document.getElementById("sample2").value === null || document.getElementById("sample2").value === "" )
+                              {
+                                  labelName = label
+                              }
+                          else
+                              {
+                                  labelName = document.getElementById("sample2").value
+                              }
+                    addLocation(lat, lng, labelName);
+                    location.href = 'index.html';
                 }
-                
+                            
            
                 
              </script>  
