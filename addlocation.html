@@ -60,7 +60,9 @@
                      <!-- HTML for GOOGLE MAP and geocoder -->               
                 <script src="http://maps.googleapis.com/maps/api/js"></script> <!-- google maps API added to web page -->
                 <script>
-                    
+                 
+                var clayton = google.maps.LatLng(-37.9120467,145.1343136);
+                var initialLocation;
                 var savedLocation = [];
                 var savedLocationData = "";
                 var geocoder;
@@ -74,13 +76,45 @@
                       geocoder = new google.maps.Geocoder();
                   var mapProp = {       // object (mapProp) to define the properties for the map
                     center:new google.maps.LatLng(-37.9120467,145.1343136), //default centres on monash clayton when initialized
-                    zoom:13,
+                    zoom:3,
                     mapTypeId:google.maps.MapTypeId.ROADMAP
                   };
                         map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
                       
-                    
-                }    
+                      // Try W3C Geolocation (Preferred)
+                      if(navigator.geolocation) 
+                      {
+                        browserSupportFlag = true;
+                        navigator.geolocation.getCurrentPosition(function(position) {
+                          initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+                          map.setCenter(initialLocation);
+                        }, function() {
+                          handleNoGeolocation(browserSupportFlag);
+                        });
+                      }
+                      // Browser doesn't support Geolocation
+                      else 
+                      {
+                        browserSupportFlag = false;
+                        handleNoGeolocation(browserSupportFlag);
+                      }
+
+                      function handleNoGeolocation(errorFlag) 
+                      {
+                        if (errorFlag === true) 
+                            {
+                                alert("Geolocation service failed bruh.");
+                                initialLocation = clayton;
+                            } 
+                        else 
+                        {
+                          alert("Your browser doesn't support geolocation. We've placed you in Clayton.");
+                          initialLocation = clayton;
+                        }
+                        map.setCenter(initialLocation);
+                      }
+                } 
+                         
                     //this function geocodes the user input
                     //function codeAddress() {
                     this.codeAddress = function() {
@@ -98,6 +132,8 @@
                               content: results[0].formatted_address // The GeocoderResult object represents a single geocoding result. A geocode request may return multiple result objects that can be addressed
                               });
                           infowindow.open(map,marker) // adds info window
+                          map.panTo(results[0].geometry.location) //centres
+                          map.setZoom(13); //zooms
                           
                           // Storing geocoded data
                           lat = results[0].geometry.location.lat()
@@ -132,7 +168,7 @@
                                   labelName = document.getElementById("sample2").value
                               }
                     addLocation(lat, lng, labelName);
-                    location.href = 'index.html';
+                    //location.href = 'index.html';
                 }
                             
            
