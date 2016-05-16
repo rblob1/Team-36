@@ -41,10 +41,14 @@ function LocationWeatherCache()
     // Returns the number of locations stored in the cache.
     //
     this.length = function() {
-        
+                
         for (var i = 1; i < 30; i++)
             {
-                if (localStorage.getItem("location"+i) !== null || localStorage.getItem("location"+i) !== "")
+                if (localStorage.getItem("location"+i) === null || localStorage.getItem("location"+i) === "")
+                    {
+                        //do nothing
+                    }
+                else
                     {
                         locationsArray[i] = localStorage.getItem("location"+i);
                     }
@@ -130,6 +134,7 @@ function LocationWeatherCache()
         //TODO: Retrieve the stored JSON string and parse to a variable called PDOLocationForecastObject
         var locationForecastJSON = localStorage.getItem(locationWeatherCachePDO);
         var PDOLocationForecastObject = JSON.parse(locationForecastJSON);
+        
         
     };
 
