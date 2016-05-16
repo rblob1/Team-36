@@ -34,19 +34,32 @@
                 <!-- HTML for LOCATION WEATHER PAGE -->
                   <script src="http://maps.googleapis.com/maps/api/js"></script> <!-- google maps API added to web page -->
                   <script>
+                
+                //var selectedLocation = JSON.parse(localStorage.getItem("selectedLocation"))
+                var selectedCity = JSON.parse(localStorage.getItem("selectedLocation"))
+                      
                 var geocoder;
                 var map;   
                     
                   function initialize() {       // <!-- creates function to initialize map -->
                       geocoder = new google.maps.Geocoder();
                   var mapProp = {       // object (mapProp) to define the properties for the map
-                    center:new google.maps.LatLng(-37.9120467,145.1343136), //centres on location 
+                    center:new google.maps.LatLng(selectedCity.lat , selectedCity.lng), //centres on location 
                     zoom:13,
                     mapTypeId:google.maps.MapTypeId.ROADMAP
                   };
                         map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
                       
-                    
+                    var marker = new google.maps.Marker({
+                            map: map,
+                            position: {lat: selectedCity.lat, lng: selectedCity.lng},
+                            animation: google.maps.Animation.DROP // makes marker BOUNCE or DROP
+                            
+                            });
+                        var infowindow = new google.maps.InfoWindow({
+                              content: selectedCity.nickname // The GeocoderResult object represents a single geocoding result. A geocode request may return multiple result objects that can be addressed
+                              });
+                      infowindow.open(map,marker)
                 } 
                 
                       google.maps.event.addDomListener(window, 'load', initialize); // DOM listener will execute the initialize() function when the page is loaded
@@ -94,7 +107,7 @@
                   
                   
                   <!-- Button to remove location -->
-                  <br><button class="mdl-button mdl-js-button mdl-button--raised" onclick="removeLocation(number)">REMOVE THIS LOCATION</button>
+                  <br><button class="mdl-button mdl-js-button mdl-button--raised" onclick="removeLocationAtIndex(index)">REMOVE THIS LOCATION</button>
 
               
               </div>
