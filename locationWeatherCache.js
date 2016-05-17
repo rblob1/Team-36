@@ -44,7 +44,7 @@ function LocationWeatherCache()
                 
         for (var i = 1; i < 30; i++)
             {
-                if (localStorage.getItem("location"+i) === null || localStorage.getItem("location"+i) === "")
+                if (localStorage.getItem("location"+i) === null || localStorage.getItem("location"+i) === "" || localStorage.getItem("location"+i) === "null")
                     {
                         //do nothing
                     }
@@ -63,7 +63,7 @@ function LocationWeatherCache()
     //
     this.locationAtIndex = function(index) {
         //index = number
-        var locationData = localStorage.getItem("location"+index)
+        var locationData = JSON.parse(localStorage.getItem("location"+index))
         return locationData
     };
 
@@ -73,38 +73,7 @@ function LocationWeatherCache()
     //
     this.addLocation = function(latitude, longitude, nickname) { 
        
-        var locationForecast;
-        var locationForecastObject = {
-                lat: latitude,
-                lng: longitude,
-                nickname: nickname,
-                forecasts: []
-            }
-        
-         if (typeof(Storage) !== "undefined")
-                {
-                    for (var i = 1; i < 30; i++)
-                        {
-                            var flag = false
-                            if (localStorage.getItem("locationForecast"+i) === null || localStorage.getItem("locationForecast"+i) === "")
-                                {
-                                    var locationForecastAsJSON = JSON.stringify(locationForecastObject) //stringifying locationObject to JSON String
-                                    localStorage.setItem("locationForecast"+i, JSON.stringify(locationForecastObject)); //storing JSON string to localstorage as key "APP_PREFIX"
-                                    alert("Forecast for location " + nickname + " added to LocalStorage "+i);
-                                    flag = true
-                                    return i
-                                }
-                            if (flag === true)
-                                {
-                                    break; //breaks out of loop so we dont fill all locations
-                                }                
-                        }
-                                        
-                }
-            else
-                {
-                   alert("Error: localStorage is not supported by current browser.");
-                }
+        //see addlocationPage.js
         
     }
 
@@ -112,8 +81,7 @@ function LocationWeatherCache()
     // 
     this.removeLocationAtIndex = function(index)
     {
-        localStorage.setItem("locationForecast"+index, null);
-        alert("Forecast for location " + index + " removed from LocalStorage");
+        //see addlocationPage.js
     }
 
     // This method is used by JSON.stringify() to serialise this class.
@@ -121,7 +89,8 @@ function LocationWeatherCache()
     // are active web service requests and so doesn't need to be saved.
     //
     this.toJSON = function() {
-        //local storage items have already have been stringified, see line 88!
+        
+        //local storage items have already have been stringified, see line 23 of addlocationPage.js
         
     };
 
@@ -134,6 +103,7 @@ function LocationWeatherCache()
         //TODO: Retrieve the stored JSON string and parse to a variable called PDOLocationForecastObject
         var locationForecastJSON = localStorage.getItem(locationWeatherCachePDO);
         var PDOLocationForecastObject = JSON.parse(locationForecastJSON);
+        // parse restores the object
         
         
     };
@@ -150,11 +120,22 @@ function LocationWeatherCache()
     // 
     
     this.getWeatherAtIndexForDate = function(index, date, callback) {
-        //https://api.forecast.io/forecast/bc23b5298009dbc490bc2d751873296a/LATITUDE,LONGITUDE use to make API request
+        //https://api.forecast.io/forecast/bc23b5298009dbc490bc2d751873296a/LATITUDE,LONGITUDE?units=ca&exclude=currently,minutely,hourly use to make API request
+        
+        //https://api.forecast.io/forecast/APIKEY/LATITUDE,LONGITUDE,TIME
+        // time should be entered as [YYYY]-[MM]-[DD]T[HH]:[MM]:[SS] i.e 2013-05-06T12:00:00
+        
+        // e.g. https://api.forecast.io/forecast/bc23b5298009dbc490bc2d751873296a/-37,145,2016-05-17T12:00:00?units=ca&exclude=currently,minutely,hourly
+        
         //from location selected we make a jsonpRequest; look at OpenFlightsAPI.html example
         //this returns JSON
         //we must then 
         //
+        
+        function callback(index, weatherObject)
+        {
+            
+        }
         
     };
     
