@@ -3,10 +3,13 @@
 //Code to add location to Local Storage
 function addLocation(latitude, longitude, nickname)
 {
+    //var locationsArray = [];
     var locationObject = {
                 lat: latitude,
                 lng: longitude,
-                nickname: nickname
+                nickname: nickname,
+                originalLocation: "",
+                forecast: []
             }
 
             if (typeof(Storage) !== "undefined")
@@ -14,8 +17,9 @@ function addLocation(latitude, longitude, nickname)
                     for (var i = 1; i < 30; i++)
                         {
                             var flag = false
-                            if (localStorage.getItem("location"+i) === null || localStorage.getItem("location"+i) === "")
+                            if (localStorage.getItem("location"+i) === null || localStorage.getItem("location"+i) === "" || localStorage.getItem("location"+i) === "null")
                                 {
+                                    locationObject.originalLocation = i
                                     var locationAsJSON = JSON.stringify(locationObject) //stringifying locationObject to JSON String
                                     localStorage.setItem("location"+i, JSON.stringify(locationObject)); //storing JSON string to localstorage as key "APP_PREFIX"
                                     alert("Location " + nickname + " added to LocalStorage "+i);
@@ -35,9 +39,11 @@ function addLocation(latitude, longitude, nickname)
     
 }
 
-//Code to remove location from Local Storage
-function removeLocation(number, nickname)
+function removeLocation(index)
 {
-    localStorage.setItem("location"+number, null)
-    alert("Removed " + nickname + " (location " + number + ") from LocalStorage")
+        //Code to remove location from Local Storage
+        var removed = JSON.parse(localStorage.getItem("location"+index))
+        removedNickName = removed.nickname
+        localStorage.setItem("location"+index, null)
+        alert("Removed " + removedNickName + " (location " + index + ") from LocalStorage")
 }
