@@ -37,6 +37,7 @@
                 
                 //var selectedLocation = JSON.parse(localStorage.getItem("selectedLocation"))
                 var selectedCity = JSON.parse(localStorage.getItem("selectedLocation"))
+                var originalIndex = selectedCity.originalLocation
                       
                 var geocoder;
                 var map;   
@@ -70,12 +71,13 @@
                  
                   <!-- Slider with Starting Value; slider should start on todays date and show previous 30 days--> 
                   <body>
-                    <input id="slider1" type="range" min="0" max="30" class="mdl-slider mdl-js-slider" value="0" step="1" onchange="showDate(this.value)" />
+                    <input id="slider1" type="range" min="0" max="30" class="mdl-slider mdl-js-slider" value="0" step="1" oninput="sliderCallBack(this.value)" />
                     <script type="text/javascript">
                         
                     // function to take value of slider and display appropriate date    
-                    function showDate(nDays) 
+                    function sliderCallBack(nDays) 
                     {
+                        //Code to generate the Date
                         this.d = new Date();
                         this.year = d.getFullYear();
                         this.month=d.getMonth()+1;
@@ -96,18 +98,48 @@
                         dayOfWeek=d.getDay()
                         date = year+"-"+(month<10?('0'+month):mon)+"-"+(day<10?('0'+day):day); 
                         
-                        document.getElementById("dateRange").innerHTML=date; //will be in form YYYY-MM-DD
+                        document.getElementById("dateRange").innerHTML=date; //will be in the form YYYY-MM-DD displayed on page
+                        
+                        date = date + "T12:00:00" //fixes time zone errors
+                        
+                        //https://api.forecast.io/forecast/bc23b5298009dbc490bc2d751873296a/LATITUDE,LONGITUDE,TIME?units=ca&exclude=currently,minutely,hourly
+                        //selectedCity
+                        var urlAPI = "https://api.forecast.io/forecast/bc23b5298009dbc490bc2d751873296a/"
+                        var selectedData = {
+                            selectedLat: selectedCity.lat,
+                            selectedLng: selectedCity.lng,
+                            time: date
+                        }
+                        jsonpRequest(urlAPI, selectedData)
+                        
+                        function jsonpRequest(url, data)
+                        {
+                            //https://api.forecast.io/forecast/bc23b5298009dbc490bc2d751873296a/-37,145,2016-05-17T12:00:00?units=ca&exclude=currently,minutely,hourly
+                            
+                            //to construct the URL:
+                            params = data.selectedLat + "," + data.selectedLng + "," + data.time
+                            params += "?units=ca&exclude=currently,minutely,hourly"
+                            
+                            var script = document.createElement('script');
+                            script.src = url + params;
+                            document.body.appendChild(script);                      
+                                
+                            document.getElementById("summary").innerHTML.src = "hello"
+                        }
+                                
+                        
                     }
-                         
+                        
                     </script>
                     </body>
                   
+                  
                   <h4>Weather for <span id="dateRange">Today</span></h4>
-                  <body>Summary: ...... <br>Minimum Temp: ..... <br> Maximum Temp: ..... <br>Humidity: .... <br>Wind speed: x km/h <br></body>
+                  <body>Summary: ......<span id="summary"> </span> <br>Minimum Temp: ..... <span id="dminTemp"> </span> <br> Maximum Temp: ..... <span id="maxTemp"> </span><br>Humidity: .... <span id="humidity"> </span><br>Wind speed: x km/h <span id="windSpeed"> </span> <br></body>
                   
                   
                   <!-- Button to remove location -->
-                  <br><button class="mdl-button mdl-js-button mdl-button--raised" onclick="removeLocationAtIndex(index)">REMOVE THIS LOCATION</button>
+                  <br><button class="mdl-button mdl-js-button mdl-button--raised" onclick="removeLocation(originalIndex)">REMOVE THIS LOCATION</button>
 
               
               </div>
