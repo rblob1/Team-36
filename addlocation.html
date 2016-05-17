@@ -48,7 +48,7 @@
                       
                        <!-- <button type="button" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" onclick="......"> onclick adds label to local storage  <i class="material-icons">add</i></button> <!--i tag used to add plus icon https://design.google.com/icons/#ic_search
                         or,  -->                        
-                          <button onclick="callAddLocation()" onmouseup="location.href = 'index.html';" class="mdl-button mdl-js-button mdl-button--raised">Save Location</button> <!-- users location saved to local storage and sent to main page -->
+                          <button onclick="callAddLocation()" class="mdl-button mdl-js-button mdl-button--raised">Save Location</button> <!-- users location saved to local storage and sent to main page -->
                       
                       
                       
@@ -168,7 +168,7 @@
                                   labelName = document.getElementById("sample2").value
                               }
                     addLocation(lat, lng, labelName);
-                    //location.href = 'index.html';
+                    location.href = 'index.html'; //returns user back to home page
                 }
                             
            
