@@ -28,6 +28,8 @@ Date.prototype.forecastDateString = function() {
 
 // Prefix to use for Local Storage.  You may change this.
 var APP_PREFIX = "weatherApp";
+var instance = new LocationWeatherCache() // creates new class instance
+
 
 function LocationWeatherCache()
 {
@@ -42,6 +44,7 @@ function LocationWeatherCache()
     //
     this.length = function() {
                 
+        // use instance.length() to call
         for (var i = 1; i < 30; i++)
             {
                 if (localStorage.getItem("location"+i) === null || localStorage.getItem("location"+i) === "" || localStorage.getItem("location"+i) === "null")
@@ -62,6 +65,8 @@ function LocationWeatherCache()
     // Indexes begin at zero.
     //
     this.locationAtIndex = function(index) {
+        
+        // use instance.locationAtIndex(index) to call
         //index = number
         var locationData = JSON.parse(localStorage.getItem("location"+index))
         return locationData
@@ -73,7 +78,43 @@ function LocationWeatherCache()
     //
     this.addLocation = function(latitude, longitude, nickname) { 
        
-        //see addlocationPage.js
+        // use instance.addLocation(latitude, longitude, nickname) to call
+        // var locationsArray = [];
+        
+    var locationObject = {
+                lat: latitude,
+                lng: longitude,
+                nickname: nickname,
+                originalLocation: "",
+                callback: "",
+                forecast: []
+            }
+
+            if (typeof(Storage) !== "undefined")
+                {
+                    for (var i = 1; i < 30; i++)
+                        {
+                            var flag = false
+                            if (localStorage.getItem("location"+i) === null || localStorage.getItem("location"+i) === "" || localStorage.getItem("location"+i) === "null")
+                                {
+                                    locationObject.originalLocation = i
+                                    var locationAsJSON = JSON.stringify(locationObject) //stringifying locationObject to JSON String
+                                    localStorage.setItem("location"+i, JSON.stringify(locationObject)); //storing JSON string to localstorage as key "APP_PREFIX"
+                                    alert("Location " + nickname + " added to LocalStorage "+i);
+                                    flag = true
+                                }
+                            if (flag === true)
+                                {
+                                    break; //breaks out of loop so we dont fill all locations
+                                }                
+                        }
+                                        
+                }
+            else
+                {
+                   alert("Error: localStorage is not supported by current browser.");
+                }
+    
         
     }
 
@@ -81,7 +122,14 @@ function LocationWeatherCache()
     // 
     this.removeLocationAtIndex = function(index)
     {
+        // use instance.removeLocationAtIndex(index) to call
         //see addlocationPage.js
+        //Code to remove location from Local Storage
+        //var removed = JSON.parse(localStorage.getItem("location"+index))
+        var removed = instance.locationAtIndex(index)
+        removedNickName = removed.nickname
+        localStorage.setItem("location"+index, null)
+        alert("Removed " + removedNickName + " (location " + index + ") from LocalStorage")
     }
 
     // This method is used by JSON.stringify() to serialise this class.
@@ -91,6 +139,7 @@ function LocationWeatherCache()
     this.toJSON = function() {
         
         //local storage items have already have been stringified, see line 23 of addlocationPage.js
+        // or, line 98 of locationWeatherCache.js
         
     };
 
@@ -100,10 +149,11 @@ function LocationWeatherCache()
     //
     this.initialiseFromPDO = function(locationWeatherCachePDO) {
                 
-        //TODO: Retrieve the stored JSON string and parse to a variable called PDOLocationForecastObject
+        // this method retrieves the selected location from localStorage and parses it into an object 
+        // TODO: Retrieve the stored JSON string and parse to a variable called PDOLocationForecastObject
         var locationForecastJSON = localStorage.getItem(locationWeatherCachePDO);
         var PDOLocationForecastObject = JSON.parse(locationForecastJSON);
-        // parse restores the object
+        // 
         
         
     };
@@ -127,14 +177,28 @@ function LocationWeatherCache()
         
         // e.g. https://api.forecast.io/forecast/bc23b5298009dbc490bc2d751873296a/-37,145,2016-05-17T12:00:00?units=ca&exclude=currently,minutely,hourly
         
-        //from location selected we make a jsonpRequest; look at OpenFlightsAPI.html example
-        //this returns JSON
-        //we must then 
-        //
+        //instance.getWeatherAtIndexForDate("selectedLocation", date, "weatherResponse")
+        // selectedLocation = object
+        // date = YYYY-MM-DDT12:00:00
+        //index is JSON.parse(localStorage.getItem("selectedLocation"))
+        // **callback = weatherResponse**
         
-        function callback(index, weatherObject)
+        //from location selected we make a jsonpRequest; look at OpenFlightsAPI.html example
+        var locationWanted = JSON.parse(localStorage.getItem(index))
+        
+        jsonpRequest("https://api.forecast.io/forecast/bc23b5298009dbc490bc2d751873296a/", locationWanted); // fnc call
+     
+        function jsonpRequest(url, data)
         {
+            // Build URL parameters from data object.
+            var params = "";
+            // encodeURIComponent()
+            params = locationWanted.lat + "," + locationWanted.lng + "," + date + "?units=ca&exclude=currently,minutely,hourly&callback=" + callback //+ "?"
             
+                        
+            var script = document.createElement('script');
+            script.src = url + params;
+            document.body.appendChild(script);
         }
         
     };
@@ -146,6 +210,10 @@ function LocationWeatherCache()
     // weather request.
     //
     this.weatherResponse = function(response) {
+       
+        callbacks = response;
+        //document.getElementById("summary").innerHTML = weather.lat
+        
         
     };
 
