@@ -33,14 +33,21 @@
                   
                 <!-- HTML for LOCATION WEATHER PAGE -->
                   <script src="http://maps.googleapis.com/maps/api/js"></script> <!-- google maps API added to web page -->
+                  
+                  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> <!--  -->
+                  
                   <script>
                 
                 //var selectedLocation = JSON.parse(localStorage.getItem("selectedLocation"))
                 var selectedCity = JSON.parse(localStorage.getItem("selectedLocation"))
                 var originalIndex = selectedCity.originalLocation
-                      
+                
+                //Sets header bar title to Nickname
+                document.getElementById("headerBarTitle").textContent = selectedCity.nickname
+                
                 var geocoder;
-                var map;   
+                var map;
+                var forcast = [];
                     
                   function initialize() {       // <!-- creates function to initialize map -->
                       geocoder = new google.maps.Geocoder();
@@ -74,6 +81,8 @@
                     <input id="slider1" type="range" min="0" max="30" class="mdl-slider mdl-js-slider" value="0" step="1" oninput="sliderCallBack(this.value)" />
                     <script type="text/javascript">
                         
+                    
+                        
                     // function to take value of slider and display appropriate date    
                     function sliderCallBack(nDays) 
                     {
@@ -104,6 +113,14 @@
                         
                         //https://api.forecast.io/forecast/bc23b5298009dbc490bc2d751873296a/LATITUDE,LONGITUDE,TIME?units=ca&exclude=currently,minutely,hourly
                         //selectedCity
+                        
+                        instance.getWeatherAtIndexForDate("selectedLocation", date, "weatherResponse")
+                        
+                        /*
+                        var weatherResponse = {
+                            callback: "JSON_CALLBACK"
+                        }
+                        
                         var urlAPI = "https://api.forecast.io/forecast/bc23b5298009dbc490bc2d751873296a/"
                         var selectedData = {
                             selectedLat: selectedCity.lat,
@@ -120,15 +137,15 @@
                             params = data.selectedLat + "," + data.selectedLng + "," + data.time
                             params += "?units=ca&exclude=currently,minutely,hourly"
                             
-                            var script = document.createElement('script');
-                            script.src = url + params;
-                            document.body.appendChild(script);                      
+                                                        
+                            $.getJSON(url + data.selectedLat + ',' + data.selectedLng + "," + data.time + '?units=ca&exclude=currently,minutely,hourly?callback=JSON_CALLBACK');
+                            
                                 
-                            document.getElementById("summary").innerHTML.src = "hello"
                         }
-                                
-                        
+                        */
                     }
+                        
+                        //document.getElementById("summary").innerHTML = weather.lat
                         
                     </script>
                     </body>
@@ -139,7 +156,7 @@
                   
                   
                   <!-- Button to remove location -->
-                  <br><button class="mdl-button mdl-js-button mdl-button--raised" onclick="removeLocation(originalIndex)">REMOVE THIS LOCATION</button>
+                  <br><button class="mdl-button mdl-js-button mdl-button--raised" onclick="instance.removeLocationAtIndex(originalIndex)">REMOVE THIS LOCATION</button>
 
               
               </div>
