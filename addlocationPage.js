@@ -3,6 +3,8 @@
 //Code to add location to Local Storage
 function addLocation(latitude, longitude, nickname)
 {
+    /*
+    // Can call this function or, instance.addLocation(latitude, longitude, nickname);
     //var locationsArray = [];
     var locationObject = {
                 lat: latitude,
@@ -36,12 +38,13 @@ function addLocation(latitude, longitude, nickname)
                 {
                    alert("Error: localStorage is not supported by current browser.");
                 }
-    
+    */
 }
 
 function removeLocation(index)
 {
-        //Code to remove location from Local Storage
+        // Can call this function or instance.removeLocationAtIndex(index)
+        // Code to remove location from Local Storage
         var removed = JSON.parse(localStorage.getItem("location"+index))
         removedNickName = removed.nickname
         localStorage.setItem("location"+index, null)
