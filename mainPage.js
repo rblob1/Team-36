@@ -20,3 +20,12 @@ function viewLocation(locationName)
     location.href = 'viewlocation.html';
     
 }
+
+function viewCurrentLocation(locationName)
+{
+    // Code to view Users Current Location
+    var wantedLocation = JSON.parse(localStorage.getItem("locationName"))
+    localStorage.setItem("selectedLocation", JSON.stringify(wantedLocation))
+    // And load the view location page.
+    location.href = 'viewlocation.html';
+}
