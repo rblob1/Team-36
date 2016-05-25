@@ -36,7 +36,7 @@
                 to use JavaScript to generate a list of similar structure.
             -->  
                
-            
+            <!-- DOM element to display all user added location -->
              <body> 
             <ul class="mdl-list" id="locationList">
               
@@ -49,9 +49,13 @@
               
               <script>
                   
-              var listHTML = "";   
+              var listHTML = "";
+                                
+              // Initialising Arrays
               var locationData = [];
-                for (var i = 1; i < 30; i++)
+              var weatherInfo = [];
+                  
+                for (var i = 0; i < 30; i++)
                   {
                       if (localStorage.getItem("location"+i) === null || localStorage.getItem("location"+i) === "" || localStorage.getItem("location"+i) === "null")
                           {
@@ -62,19 +66,33 @@
                               var locationDataString = localStorage.getItem("location"+i);
                               locationData[i] = JSON.parse(locationDataString);
                               
-                              ///*
+                              weatherInfo[i] = JSON.parse(localStorage.getItem("location"+i+".forcast"))
+                              console.log(weatherInfo[i])
+                              
                               //Code to display all locations in local storage on main page
-                              listHTML += "<ul class=\"mdl-list\" id=\"locationList\">"
-                              listHTML += "<li class=\"mdl-list__item mdl-list__item--two-line\" onclick=\"viewLocation("+i+");\">"
-                              listHTML += "<span class=\"mdl-list__item-primary-content\">"
-                              listHTML += "<img class=\"mdl-list__item-icon\" id=\"icon0\" src=\"images/loading.png\" class=\"list-avatar\">"
-                              listHTML += "<span id=\"location"+i+"\">" + locationData[i].nickname + "</span>"
-                              listHTML += "<span id=\"weather0\" class=\"mdl-list__item-sub-title\">" + "Weather summary request" + "</span></span></li>"    
+                              if (weatherInfo[i] === null || weatherInfo[i] === 'null' || weatherInfo[i] === "" )
+                                  {
+                                      listHTML += "<ul class=\"mdl-list\" id=\"locationList\">"
+                                      listHTML += "<li class=\"mdl-list__item mdl-list__item--two-line\" onclick=\"viewLocation("+i+");\">"
+                                      listHTML += "<span class=\"mdl-list__item-primary-content\">"
+                                      listHTML += "<img class=\"mdl-list__item-icon\" id=\"icon"+i+"\" src=\"images/"+"loading"+".png \" class=\"list-avatar\">"
+                                      listHTML += "<span id=\"location"+i+"\">" + locationData[i].nickname + "</span>"
+                                      listHTML += "<span id=\"weather"+i+"\" class=\"mdl-list__item-sub-title\">" + "Weather Summary" + "</span></span></li>"
+                                  }
+                              else
+                                  {
+                                      listHTML += "<ul class=\"mdl-list\" id=\"locationList\">"
+                                      listHTML += "<li class=\"mdl-list__item mdl-list__item--two-line\" onclick=\"viewLocation("+i+");\">"
+                                      listHTML += "<span class=\"mdl-list__item-primary-content\">"
+                                      listHTML += "<img class=\"mdl-list__item-icon\" id=\"icon"+i+"\" src=\"images/"+weatherInfo[i].icon+".png \" class=\"list-avatar\">"
+                                      listHTML += "<span id=\"location"+i+"\">" + locationData[i].nickname + "</span>"
+                                      listHTML += "<span id=\"weather"+i+"\" class=\"mdl-list__item-sub-title\">" + "Min: " + weatherInfo[i].tempMin + " Max: " + weatherInfo[i].tempMax + "</span></span></li>"
+                                  }
                               
-                              //*/
+                                                            
+                              //this adds the generated locations list to the DOM element
+                              document.getElementById("locationList").innerHTML = listHTML
                               
-                              document.getElementById("locationList").innerHTML = listHTML 
-                              //this uses example codes DOM and writes over it
                           }
                   }
               
