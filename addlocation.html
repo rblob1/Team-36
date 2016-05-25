@@ -3,7 +3,7 @@
     <head>
         <title>Weather</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
         <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.1.3/material.indigo-pink.min.css">
         <script src="https://storage.googleapis.com/code.getmdl.io/1.1.3/material.min.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
@@ -58,7 +58,7 @@
                   
                   
                      <!-- HTML for GOOGLE MAP and geocoder -->               
-                <script src="http://maps.googleapis.com/maps/api/js"></script> <!-- google maps API added to web page -->
+                <script src="https://maps.googleapis.com/maps/api/js"></script> <!-- google maps API added to web page -->
                 <script>
                  
                 var clayton = google.maps.LatLng(-37.9120467,145.1343136);
@@ -76,18 +76,28 @@
                       geocoder = new google.maps.Geocoder();
                   var mapProp = {       // object (mapProp) to define the properties for the map
                     center:new google.maps.LatLng(-37.9120467,145.1343136), //default centres on monash clayton when initialized
-                    zoom:3,
+                    zoom:13,
                     mapTypeId:google.maps.MapTypeId.ROADMAP
                   };
                         map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
                       
                       // Try W3C Geolocation (Preferred)
+                      // Handles Current Location
                       if(navigator.geolocation) 
                       {
                         browserSupportFlag = true;
                         navigator.geolocation.getCurrentPosition(function(position) {
                           initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
                           map.setCenter(initialLocation);
+                            var currentLocation = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude,
+                                nickname: "Users Current Location"
+                            }
+                            //console.log(currentLocation)
+                            localStorage.setItem("location0", JSON.stringify(currentLocation))
+                            alert("Current Location Added to Local Storage")
+                            
                         }, function() {
                           handleNoGeolocation(browserSupportFlag);
                         });
@@ -103,7 +113,7 @@
                       {
                         if (errorFlag === true) 
                             {
-                                alert("Geolocation service failed bruh.");
+                                alert("Geolocation for Current Location service unavailable.");
                                 initialLocation = clayton;
                             } 
                         else 
@@ -125,9 +135,10 @@
                         var marker = new google.maps.Marker({
                             map: map,
                             position: results[0].geometry.location,
-                            animation:google.maps.Animation.DROP // makes marker BOUNCE or DROP
+                            //animation:google.maps.Animation.DROP // makes marker BOUNCE or DROP
                             
                             });
+                          
                         var infowindow = new google.maps.InfoWindow({
                               content: results[0].formatted_address // The GeocoderResult object represents a single geocoding result. A geocode request may return multiple result objects that can be addressed
                               });
@@ -139,7 +150,7 @@
                           lat = results[0].geometry.location.lat()
                           lng = results[0].geometry.location.lng()
                           label = results[0].formatted_address
-                                                                            
+                                                                           
                       } 
                     
                     });
@@ -167,8 +178,9 @@
                               {
                                   labelName = document.getElementById("sample2").value
                               }
-                    addLocation(lat, lng, labelName);
-                    location.href = 'index.html'; //returns user back to home page
+                    instance.addLocation(lat, lng, labelName); //instance of the locationWeatherCache
+                    //window.location.assign("index.html") //returns user back to home page
+                    location.href = 'viewlocation.html';
                 }
                             
            
