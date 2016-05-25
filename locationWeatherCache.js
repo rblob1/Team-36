@@ -28,7 +28,7 @@ Date.prototype.forecastDateString = function() {
 
 // Prefix to use for Local Storage.  You may change this.
 var APP_PREFIX = "weatherApp";
-var instance = new LocationWeatherCache() // creates new class instance
+var instance = new LocationWeatherCache() // creates new class instance with a new closure
 
 
 function LocationWeatherCache()
@@ -37,6 +37,7 @@ function LocationWeatherCache()
 
     var locationsArray = []; 
     var callbacks = {};
+    var locationWanted = "";
 
     // Public methods:
     
@@ -87,7 +88,7 @@ function LocationWeatherCache()
                 nickname: nickname,
                 originalLocation: "",
                 callback: "",
-                forecast: []
+                forecast: {}
             }
 
             if (typeof(Storage) !== "undefined")
@@ -122,14 +123,21 @@ function LocationWeatherCache()
     // 
     this.removeLocationAtIndex = function(index)
     {
-        // use instance.removeLocationAtIndex(index) to call
-        //see addlocationPage.js
-        //Code to remove location from Local Storage
-        //var removed = JSON.parse(localStorage.getItem("location"+index))
-        var removed = instance.locationAtIndex(index)
-        removedNickName = removed.nickname
-        localStorage.setItem("location"+index, null)
-        alert("Removed " + removedNickName + " (location " + index + ") from LocalStorage")
+        if (index === null || index === 'null')
+            {
+                alert("Cannot remove current location!")
+            }
+        else
+            {
+                // use instance.removeLocationAtIndex(index) to call
+                //see addlocationPage.js
+                //Code to remove location from Local Storage
+                var removed = instance.locationAtIndex(index)
+                removedNickName = removed.nickname
+                localStorage.setItem("location"+index, null)
+                alert("Removed " + removedNickName + " (location " + index + ") from LocalStorage")
+                location.href = 'index.html';
+            }
     }
 
     // This method is used by JSON.stringify() to serialise this class.
@@ -153,7 +161,7 @@ function LocationWeatherCache()
         // TODO: Retrieve the stored JSON string and parse to a variable called PDOLocationForecastObject
         var locationForecastJSON = localStorage.getItem(locationWeatherCachePDO);
         var PDOLocationForecastObject = JSON.parse(locationForecastJSON);
-        // 
+        
         
         
     };
@@ -170,21 +178,20 @@ function LocationWeatherCache()
     // 
     
     this.getWeatherAtIndexForDate = function(index, date, callback) {
-        //https://api.forecast.io/forecast/bc23b5298009dbc490bc2d751873296a/LATITUDE,LONGITUDE?units=ca&exclude=currently,minutely,hourly use to make API request
-        
-        //https://api.forecast.io/forecast/APIKEY/LATITUDE,LONGITUDE,TIME
+                
+        // https://api.forecast.io/forecast/APIKEY/LATITUDE,LONGITUDE,TIME
         // time should be entered as [YYYY]-[MM]-[DD]T[HH]:[MM]:[SS] i.e 2013-05-06T12:00:00
         
         // e.g. https://api.forecast.io/forecast/bc23b5298009dbc490bc2d751873296a/-37,145,2016-05-17T12:00:00?units=ca&exclude=currently,minutely,hourly
         
-        //instance.getWeatherAtIndexForDate("selectedLocation", date, "weatherResponse")
-        // selectedLocation = object
+        // instance.getWeatherAtIndexForDate("selectedLocation", date, "weatherResponse") --> use this to call
+        // selectedLocation is an object
         // date = YYYY-MM-DDT12:00:00
-        //index is JSON.parse(localStorage.getItem("selectedLocation"))
-        // **callback = weatherResponse**
+        // index is JSON.parse(localStorage.getItem("selectedLocation"))
+        // the callback is weatherResponse
         
         //from location selected we make a jsonpRequest; look at OpenFlightsAPI.html example
-        var locationWanted = JSON.parse(localStorage.getItem(index))
+        locationWanted = JSON.parse(localStorage.getItem(index))
         
         jsonpRequest("https://api.forecast.io/forecast/bc23b5298009dbc490bc2d751873296a/", locationWanted); // fnc call
      
@@ -192,8 +199,9 @@ function LocationWeatherCache()
         {
             // Build URL parameters from data object.
             var params = "";
-            // encodeURIComponent()
-            params = locationWanted.lat + "," + locationWanted.lng + "," + date + "?units=ca&exclude=currently,minutely,hourly&callback=" + callback //+ "?"
+            // encodeURIComponent() for illegal characters in query string
+            // Building query string for request
+            params = locationWanted.lat + "," + locationWanted.lng + "," + date + "?units=ca&exclude=currently,minutely,hourly,typeof&callback=" + callback //+ "?"
             
                         
             var script = document.createElement('script');
@@ -209,12 +217,30 @@ function LocationWeatherCache()
     // This should invoke the recorded callback function for that
     // weather request.
     //
-    this.weatherResponse = function(response) {
+    weatherResponse = function(response) {
        
-        callbacks = response;
-        //document.getElementById("summary").innerHTML = weather.lat
+        console.log(response)
+        var locationIndex = indexForLocation(locationWanted.lat, locationWanted.lng)
+        console.log(locationIndex)
         
+        var weatherData = {
+            tempMin: response.daily.data[0].temperatureMin,
+            tempMax: response.daily.data[0].temperatureMax,
+            icon: response.daily.data[0].icon
+        }
         
+        localStorage.setItem("location"+locationIndex+".forcast", JSON.stringify(weatherData))
+        
+        //var weatherCallback = response.results
+        //document.getElementById("summary").innerHTML = response.daily.data[0]
+        //Code to update information on the page
+        
+        document.getElementById("summary").innerHTML = response.daily.data[0].summary
+        document.getElementById("minTemp").innerHTML = response.daily.data[0].temperatureMin
+        document.getElementById("maxTemp").innerHTML = response.daily.data[0].temperatureMax
+        document.getElementById("humidity").innerHTML = response.daily.data[0].humidity
+        document.getElementById("windSpeed").innerHTML = response.daily.data[0].windSpeed
+                
     };
 
     // Private methods:
@@ -225,7 +251,15 @@ function LocationWeatherCache()
     // returns -1.
     //
     function indexForLocation(latitude, longitude) {
-        
+        for (var i = 0; i < 30; i++)
+            {
+                var temp = JSON.parse(localStorage.getItem("location"+i)) //creates temp variable
+                if (temp.lat === latitude && temp.lng === longitude)
+                    {
+                        return i //return index of matched location
+                    }
+                
+            }
     }
 }
 
